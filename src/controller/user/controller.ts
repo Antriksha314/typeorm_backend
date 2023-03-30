@@ -1,83 +1,43 @@
-import { Response } from "express";
-import { CXN } from "typeorm/data-source";
-import { Session } from "typeorm/entities/session";
-import { User } from "typeorm/entities/user";
-import { UserRepository } from "utils/repository";
-import { ErrorMessage, SuccessMessage } from "utils/response";
-import { GenerateAccessToken, GenerateRefreshToken } from "utils/token";
-import { GenerateBcryptPassword, PasswordCheck } from "./helper";
+import { Request, Response } from 'express';
+import { UserRepository } from 'src/utils/repository';
+import { ErrorMessage, SuccessMessage } from 'src/utils/response';
 
-export const singUp = async (req: any, res: Response) => {
-    try {
-        const { firstName, lastName, email, password } = req.body;
-        const user = await UserRepository.findOne({ where: email });
-        if (user) {
-            return ErrorMessage({ res, message: "User already exists" })
-        };
+export const get = async (req: Request, res: Response) => {
+  try {
+    const { firstName, lastName, email } = req.body;
+    const user = await UserRepository.findOne({ where: email });
 
-        const create = new User();
-        create.firstName = firstName
-        create.lastName = lastName
-        create.email = email
-        create.password = await GenerateBcryptPassword({ password })
-
-        await CXN.manager.save(create)
-
-        return SuccessMessage({ res, message: "User successfully registered" })
-
-    } catch (error) {
-        return ErrorMessage({ res, message: error?.message })
+    if (!user) {
+      return ErrorMessage({ res, message: 'User not found' });
     }
 
-}
+    user.firstName = firstName;
+    user.lastName = lastName;
 
-export const signIn = async (req: any, res: Response) => {
-    try {
-        const { email, password } = req.body
-        const user = await UserRepository.findOne({ where: email });
+    await UserRepository.save(user);
 
-        if (!user) {
-            return ErrorMessage({ res, message: "User not found" })
-        }
+    return SuccessMessage({ res, message: 'User successfully updated' });
+  } catch (error) {
+    return ErrorMessage({ res, message: error?.message });
+  }
+};
 
-        const isMatch = await PasswordCheck({ password, dbPassword: user.password });
-        if (!isMatch) {
-            return ErrorMessage({ res, message: "Please provid valid password" })
-        }
-        
-        const accessToken = await GenerateAccessToken({ email: user.email });
-        const refreshToken = await GenerateRefreshToken({ email: user.email });
+export const update = async (req: Request, res: Response) => {
+  try {
+    const { firstName, lastName, email } = req.body;
+    const user = await UserRepository.findOne({ where: email });
 
-        const session  = new Session();
-        session.accessToken =  accessToken;
-        session.refreshToken = refreshToken;
-        
-        return SuccessMessage({ res, message: "User successfully updated" })
-    } catch (error) {
-        return ErrorMessage({ res, message: error?.message })
-
+    if (!user) {
+      return ErrorMessage({ res, message: 'User not found' });
     }
-}
 
-export const update = async (req: any, res: Response) => {
-    try {
-        const { firstName, lastName, email } = req.body
-        const user = await UserRepository.findOne({ where: email });
+    user.firstName = firstName;
+    user.lastName = lastName;
 
-        if (!user) {
-            return ErrorMessage({ res, message: "User not found" })
-        }
+    await UserRepository.save(user);
 
-        user.firstName = firstName
-        user.lastName = lastName
-
-        await UserRepository.save(user)
-
-        return SuccessMessage({ res, message: "User successfully updated" })
-    } catch (error) {
-        return ErrorMessage({ res, message: error?.message })
-
-    }
-}
-
-
+    return SuccessMessage({ res, message: 'User successfully updated' });
+  } catch (error) {
+    return ErrorMessage({ res, message: error?.message });
+  }
+};

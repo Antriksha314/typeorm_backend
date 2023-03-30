@@ -1,5 +1,7 @@
-import express from 'express';
+import * as express from 'express';
+import { AllUser } from '../../controller/admin/controller';
 
-export const routers = express.Router();
+const router = express.Router();
 
-routers.route('/admin/users').get();
+router.route('/admin/users').get(AllUser);
+module.exports = router;

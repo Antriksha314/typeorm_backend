@@ -1,6 +1,8 @@
-import express from 'express';
+import * as express from 'express';
 
-export const routers = express.Router();
+const router = express.Router();
 
-routers.route('/user/signup').post();
-routers.route('/user/signin').post();
+router.route('/user/update').post();
+router.route('/user/signin').post();
+
+module.exports = router;
