@@ -1,17 +1,42 @@
 {
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.0",
-    "pg": "^8.10.0",
-    "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.3.12"
+  "name": "authentication-app-backend",
+  "version": "1.0.0",
+  "description": "Authentication backend",
+  "main": "src/server.js",
+  "scripts": {
+    "dev:w": "nodemon ./dist/server.js",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "compile:w": "npx tsc -w",
+    "start": "node ./dist/server.js",
+    "compile": "npx tsc",
+    "sync:migrations": "typeorm migration:generate ./src/typeorm/migration/schema -d ./dist/typeorm/data-source.js",
+    "run:migrations": "typeorm migration:run -d ./dist/typeorm/data-source.js",
+    "db-reset": "typeorm schema:drop -d ./dist/typeorm/data-source.js",
+    "format": "prettier --write src/**/*.{ts,js,json}",
+    "lint": "eslint --ext src/**/*.{ts,js} --color",
+    "isready": "npm run format && npm run lint && npm run start"
   },
   "devDependencies": {
-    "@types/express": "^4.17.17",
-    "@types/node": "^18.15.10",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.0.2"
+    "@types/bcrypt": "^5.0.0",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/jsonwebtoken": "^9.0.1",
+    "@types/node": "^8.0.29",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "@typescript-eslint/parser": "^5.20.0",
+    "eslint": "^7.32.0",
+    "ts-node": "3.3.0",
+    "typescript": "^4.6.3"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.0",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^9.0.0",
+    "pg": "^8.4.0",
+    "reflect-metadata": "^0.1.10",
+    "typeorm": "0.3.6"
   }
 }

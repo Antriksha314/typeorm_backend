@@ -10,7 +10,7 @@ export const GenerateBcryptPassword = async ({ password }: { password: string })
   }
 };
 
-export const PasswordCheck = async ({ password, dbPassword }: { password: string; dbPassword: string }) => {
+export const MatchBcryptPassword = async ({ password, dbPassword }: { password: string; dbPassword: string }) => {
   try {
     const isMatch = await bcrypt.compare(password, dbPassword);
     return isMatch;

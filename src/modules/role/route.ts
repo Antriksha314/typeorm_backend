@@ -1,8 +1,9 @@
-import express from 'express';
+import * as express from 'express';
 
-export const routers = express.Router();
+const router = express.Router();
 
-routers.route('/role').get();
-routers.route('/role/create').post();
-routers.route('/role/:id/update').put();
-routers.route('/role/:id/delete').delete();
+router.route('/role').get();
+router.route('/role/create').post();
+router.route('/role/:id/update').put();
+router.route('/role/:id/delete').delete();
+module.exports = router;
